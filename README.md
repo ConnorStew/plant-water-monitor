@@ -5,6 +5,7 @@
 Push:
 ```bash
 scp ./gpio.py ./requirements.txt connor@192.168.4.56:~/gpio
+sudo systemctl restart gpio.service
 ```
 
 Run:

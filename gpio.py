@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 from enum import Enum
 import time
+import logging
+import sys
 
 # Pin setup
 GREEN_LED_PIN = 17
@@ -38,6 +40,15 @@ def setup() -> None:
     for pin in led_pins:
         GPIO.setup(pin, GPIO.OUT)
 
+    # Logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
 def cleanup() -> None:
     GPIO.cleanup()
 
@@ -56,7 +67,7 @@ def measure_frequency(pin, duration=1.0) -> int:
     return count / duration
 
 def show_level(level: FrequencyLevel) -> None:
-    print(f"Detected Level: {level}")
+    logging.info(f"Detected Level: {level}")
 
     # Reset all LEDs
     for pin in led_pins:
@@ -71,7 +82,7 @@ def show_level(level: FrequencyLevel) -> None:
             GPIO.output(RED_LED_PIN, GPIO.HIGH)
 
         case FrequencyLevel.DP_3_WITH_LIQUID | FrequencyLevel.DP_4_WITH_LIQUID:
-            print("Liquid: {level}")
+            logging.info("Liquid: {level}")
             GPIO.output(BLUE_LED_PIN, GPIO.HIGH)
 
 def map_frequency_to_level(freq: int) -> FrequencyLevel:
@@ -86,14 +97,19 @@ def main() -> None:
     try:
         while True:
             freq = measure_frequency(SENSOR_PIN, SAMPLE_DURATION)
-            print(f"Measured Frequency: {freq:.1f} Hz")
+            logging.info(f"Measured Frequency: {freq:.1f} Hz")
 
             level = map_frequency_to_level(freq)
             show_level(level)
 
             time.sleep(0.5)
     except KeyboardInterrupt:
-        print("Exiting gracefully")
+        logging.info("Exiting gracefully")
         cleanup()
 
-main()
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        logging.exception("Unhandled exception occurred")
+        cleanup()
