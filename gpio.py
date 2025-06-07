@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from enum import Enum
 import time
 
 # Pin setup
@@ -10,17 +11,26 @@ SENSOR_PIN = 18
 led_pins = (GREEN_LED_PIN, RED_LED_PIN, BLUE_LED_PIN)
 
 # Frequency thresholds for each level
+class FrequencyLevel(Enum):
+    UNKNOWN = 0
+    WITHOUT_LIQUID = 1
+    DP_1_WITH_LIQUID = 2
+    DP_2_WITH_LIQUID = 3
+    DP_3_WITH_LIQUID = 4
+    DP_4_WITH_LIQUID = 5
+
 FREQ_LEVELS = {
-    "Without Liquid": (0, 40), # 20Hz
-    "DP 1 With Liquid": (41, 80), # 50Hz
-    "DP 2 With Liquid": (81, 150), # 100 Hz
-    "DP 3 With Liquid": (151, 280), # 200 Hz
-    "DP 4 With Liquid": (281, 1000) # 400Hz
+    FrequencyLevel.UNKNOWN: (-1,-1),
+    FrequencyLevel.WITHOUT_LIQUID: (0, 40), # 20Hz
+    FrequencyLevel.DP_1_WITH_LIQUID: (41, 80), # 50Hz
+    FrequencyLevel.DP_2_WITH_LIQUID: (81, 150), # 100 Hz
+    FrequencyLevel.DP_3_WITH_LIQUID: (151, 280), # 200 Hz
+    FrequencyLevel.DP_4_WITH_LIQUID: (281, 1000) # 400Hz
 }
 
 SAMPLE_DURATION = 1.0  # seconds
 
-def setup():
+def setup() -> None:
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 
@@ -28,10 +38,10 @@ def setup():
     for pin in led_pins:
         GPIO.setup(pin, GPIO.OUT)
 
-def cleanup():
+def cleanup() -> None:
     GPIO.cleanup()
 
-def measure_frequency(pin, duration=1.0):
+def measure_frequency(pin, duration=1.0) -> int:
     """Count rising edges over the given time to estimate frequency."""
     count = 0
     start = time.time()
@@ -45,28 +55,33 @@ def measure_frequency(pin, duration=1.0):
         last = current
     return count / duration
 
-def show_level(level):
+def show_level(level: FrequencyLevel) -> None:
     print(f"Detected Level: {level}")
+
     # Reset all LEDs
     for pin in led_pins:
         GPIO.output(pin, GPIO.LOW)
 
-    if level == "Low":
-        GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
-    elif level == "Medium":
-        GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
-        GPIO.output(RED_LED_PIN, GPIO.HIGH)
-    elif level == "High":
-        for pin in led_pins:
-            GPIO.output(pin, GPIO.HIGH)
+    # Turn on LED
+    match level:
+        case FrequencyLevel.WITHOUT_LIQUID:
+            GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
 
-def map_frequency_to_level(freq):
+        case FrequencyLevel.DP_1_WITH_LIQUID | FrequencyLevel.DP_2_WITH_LIQUID:
+            GPIO.output(RED_LED_PIN, GPIO.HIGH)
+
+        case FrequencyLevel.DP_3_WITH_LIQUID | FrequencyLevel.DP_4_WITH_LIQUID:
+            print("Liquid: {level}")
+            GPIO.output(BLUE_LED_PIN, GPIO.HIGH)
+
+def map_frequency_to_level(freq: int) -> FrequencyLevel:
     for level, (low, high) in FREQ_LEVELS.items():
         if low <= freq <= high:
             return level
-    return "Unknown"
+    
+    return FrequencyLevel.UNKNOWN
 
-def main():
+def main() -> None:
     setup()
     try:
         while True:
