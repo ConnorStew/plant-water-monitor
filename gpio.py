@@ -23,7 +23,7 @@ class FrequencyLevel(Enum):
     DP_4_WITH_LIQUID = 5
 
 FREQ_LEVELS = {
-    FrequencyLevel.UNKNOWN: (-1,-1),
+    FrequencyLevel.UNKNOWN: (-1, -1),
     FrequencyLevel.WITHOUT_LIQUID: (0, 40), # 20Hz
     FrequencyLevel.DP_1_WITH_LIQUID: (41, 80), # 50Hz
     FrequencyLevel.DP_2_WITH_LIQUID: (81, 150), # 100 Hz
@@ -31,83 +31,73 @@ FREQ_LEVELS = {
     FrequencyLevel.DP_4_WITH_LIQUID: (281, 1000) # 400Hz
 }
 
-SAMPLE_DURATION = 1.0  # seconds
+SAMPLE_DURATION = 0.5  # seconds
 
 def setup() -> None:
-    # Register signal handlers
     signal.signal(signal.SIGTERM, cleanup)
-    signal.signal(signal.SIGINT, cleanup)  # For Ctrl+C or `systemctl stop`
+    signal.signal(signal.SIGINT, cleanup)
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
+    GPIO.setup(SENSOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-    GPIO.setup(SENSOR_PIN, GPIO.IN)
     for pin in led_pins:
         GPIO.setup(pin, GPIO.OUT)
 
-    # Logging
     logging.basicConfig(
         level=logging.INFO,
         format="%(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-        ]
+        handlers=[logging.StreamHandler(sys.stdout)]
     )
 
-def cleanup(signum, frame):
+def cleanup(signum=None, frame=None):
     print("Cleaning up resources...")
     GPIO.cleanup()
     sys.exit(0)
 
-def measure_frequency(pin, duration=1.0) -> int:
-    """Count rising edges over the given time to estimate frequency."""
+def measure_frequency(pin: int, duration: float = SAMPLE_DURATION) -> float:
+    """Efficient edge-counting to determine frequency."""
     count = 0
-    start = time.time()
-    end = start + duration
-    last = GPIO.input(pin)
+    start_time = time.monotonic()
+    end_time = start_time + duration
+    last_state = GPIO.input(pin)
 
-    while time.time() < end:
-        current = GPIO.input(pin)
-        if current == GPIO.HIGH and last == GPIO.LOW:
+    while time.monotonic() < end_time:
+        current_state = GPIO.input(pin)
+        if current_state == GPIO.HIGH and last_state == GPIO.LOW:
             count += 1
-        last = current
+        last_state = current_state
+
     return count / duration
 
-def show_level(level: FrequencyLevel) -> None:
-    logging.info(f"Detected Level: {level}")
-
-    # Reset all LEDs
-    for pin in led_pins:
-        GPIO.output(pin, GPIO.LOW)
-
-    # Turn on LED
-    match level:
-        case FrequencyLevel.WITHOUT_LIQUID:
-            GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
-
-        case FrequencyLevel.DP_1_WITH_LIQUID | FrequencyLevel.DP_2_WITH_LIQUID:
-            GPIO.output(RED_LED_PIN, GPIO.HIGH)
-
-        case FrequencyLevel.DP_3_WITH_LIQUID | FrequencyLevel.DP_4_WITH_LIQUID:
-            logging.info("Liquid: {level}")
-            GPIO.output(BLUE_LED_PIN, GPIO.HIGH)
-
-def map_frequency_to_level(freq: int) -> FrequencyLevel:
+def map_frequency_to_level(freq: float) -> FrequencyLevel:
     for level, (low, high) in FREQ_LEVELS.items():
         if low <= freq <= high:
             return level
-    
     return FrequencyLevel.UNKNOWN
+
+def show_level(level: FrequencyLevel) -> None:
+    logging.info(f"Detected Level: {level.name}")
+
+    for pin in led_pins:
+        GPIO.output(pin, GPIO.LOW)
+
+    if level == FrequencyLevel.WITHOUT_LIQUID:
+        GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
+    elif level in (FrequencyLevel.DP_1_WITH_LIQUID, FrequencyLevel.DP_2_WITH_LIQUID):
+        GPIO.output(RED_LED_PIN, GPIO.HIGH)
+    elif level in (FrequencyLevel.DP_3_WITH_LIQUID, FrequencyLevel.DP_4_WITH_LIQUID):
+        GPIO.output(BLUE_LED_PIN, GPIO.HIGH)
 
 def main() -> None:
     setup()
     while True:
-        freq = measure_frequency(SENSOR_PIN, SAMPLE_DURATION)
+        freq = measure_frequency(SENSOR_PIN)
         logging.info(f"Measured Frequency: {freq:.1f} Hz")
 
         level = map_frequency_to_level(freq)
         show_level(level)
 
-        time.sleep(0.5)
+        time.sleep(0.2)  # shorter delay for quicker updates
 
 main()
