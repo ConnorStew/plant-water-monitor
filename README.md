@@ -10,8 +10,17 @@ scp ./gpio.py ./requirements.txt connor@192.168.4.56:~/gpio
 Run:
 ```bash
 ssh connor@192.168.4.56
+cd gpio
 source ./venv/bin/activate
 python gpio.py
+```
+
+Init Service:
+```bash
+scp ./gpio.service ./gpio_start.sh connor@192.168.4.56:~/gpio
+sudo mv /home/connor/gpio/gpio.service /etc/systemd/system
+sudo systemctl enable gpio.service
+sudo systemctl status gpio.service
 ```
 
 ## Setup

@@ -1,0 +1,12 @@
+[Unit]
+Description=GPIO Python Service
+After=network.target
+
+[Service]
+ExecStart=bash /home/connor/gpio/gpio_start.sh
+Restart=always
+User=connor
+WorkingDirectory=/home/connor
+
+[Install]
+WantedBy=multi-user.target
