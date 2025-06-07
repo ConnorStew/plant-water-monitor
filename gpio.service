@@ -3,10 +3,10 @@ Description=GPIO Python Service
 After=network.target
 
 [Service]
-ExecStart=bash /home/connor/gpio/gpio_start.sh
+ExecStart=/home/connor/gpio/venv/bin/python /home/connor/gpio/gpio.py
 Restart=always
 User=connor
-WorkingDirectory=/home/connor
+WorkingDirectory=/home/connor/gpio
 
 [Install]
 WantedBy=multi-user.target

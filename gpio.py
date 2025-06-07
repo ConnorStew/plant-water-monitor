@@ -3,6 +3,7 @@ from enum import Enum
 import time
 import logging
 import sys
+import signal
 
 # Pin setup
 GREEN_LED_PIN = 17
@@ -33,6 +34,10 @@ FREQ_LEVELS = {
 SAMPLE_DURATION = 1.0  # seconds
 
 def setup() -> None:
+    # Register signal handlers
+    signal.signal(signal.SIGTERM, cleanup)
+    signal.signal(signal.SIGINT, cleanup)  # For Ctrl+C or `systemctl stop`
+
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 
@@ -43,14 +48,16 @@ def setup() -> None:
     # Logging
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
+        format="%(message)s",
         handlers=[
             logging.StreamHandler(sys.stdout)
         ]
     )
 
-def cleanup() -> None:
+def cleanup(signum, frame):
+    print("Cleaning up resources...")
     GPIO.cleanup()
+    sys.exit(0)
 
 def measure_frequency(pin, duration=1.0) -> int:
     """Count rising edges over the given time to estimate frequency."""
@@ -94,22 +101,13 @@ def map_frequency_to_level(freq: int) -> FrequencyLevel:
 
 def main() -> None:
     setup()
-    try:
-        while True:
-            freq = measure_frequency(SENSOR_PIN, SAMPLE_DURATION)
-            logging.info(f"Measured Frequency: {freq:.1f} Hz")
+    while True:
+        freq = measure_frequency(SENSOR_PIN, SAMPLE_DURATION)
+        logging.info(f"Measured Frequency: {freq:.1f} Hz")
 
-            level = map_frequency_to_level(freq)
-            show_level(level)
+        level = map_frequency_to_level(freq)
+        show_level(level)
 
-            time.sleep(0.5)
-    except KeyboardInterrupt:
-        logging.info("Exiting gracefully")
-        cleanup()
+        time.sleep(0.5)
 
-if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        logging.exception("Unhandled exception occurred")
-        cleanup()
+main()

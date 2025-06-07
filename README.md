@@ -18,7 +18,7 @@ python gpio.py
 
 Init Service:
 ```bash
-scp ./gpio.service ./gpio_start.sh connor@192.168.4.56:~/gpio
+scp ./gpio.service connor@192.168.4.56:~/gpio
 sudo mv /home/connor/gpio/gpio.service /etc/systemd/system
 sudo systemctl enable gpio.service
 sudo systemctl status gpio.service
