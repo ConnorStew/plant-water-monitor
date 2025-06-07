@@ -16,5 +16,4 @@ python gpio.py
 
 ## Setup
 
-- Using a raspberry pi 1, the pins are in:
-    - GPIO 17 = Board 11
+- Using a raspberry pi 1, the pins are in shown in the attached board image.
