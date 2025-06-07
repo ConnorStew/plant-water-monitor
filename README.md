@@ -4,7 +4,7 @@
 
 Push:
 ```bash
-scp ./gpio.py connor@192.168.4.56:~
+scp ./* connor@192.168.4.56:~/gpio
 ssh connor@192.168.4.56
 python gpio.py
 ```
