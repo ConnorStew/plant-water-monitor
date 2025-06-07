@@ -4,7 +4,17 @@
 
 Push:
 ```bash
-scp ./* connor@192.168.4.56:~/gpio
+scp ./gpio.py ./requirements.txt connor@192.168.4.56:~/gpio
+```
+
+Run:
+```bash
 ssh connor@192.168.4.56
+source ./venv/bin/activate
 python gpio.py
 ```
+
+## Setup
+
+- Using a raspberry pi 1, the pins are in:
+    - GPIO 17 = Board 11
