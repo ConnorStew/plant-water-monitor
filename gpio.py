@@ -1,53 +1,82 @@
 import RPi.GPIO as GPIO
 import time
 
+# Pin setup
 GREEN_LED_PIN = 17
 RED_LED_PIN = 23
 BLUE_LED_PIN = 22
-SLEEP_TIME = 0.5
+SENSOR_PIN = 18
 
-pins = (GREEN_LED_PIN, RED_LED_PIN, BLUE_LED_PIN)
+led_pins = (GREEN_LED_PIN, RED_LED_PIN, BLUE_LED_PIN)
+
+# Frequency thresholds for each level
+FREQ_LEVELS = {
+    "Without Liquid": (0, 40), # 20Hz
+    "DP 1 With Liquid": (41, 80), # 50Hz
+    "DP 2 With Liquid": (81, 150), # 100 Hz
+    "DP 3 With Liquid": (151, 280), # 200 Hz
+    "DP 4 With Liquid": (281, 1000) # 400Hz
+}
+
+SAMPLE_DURATION = 1.0  # seconds
 
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    for pin in pins:
+
+    GPIO.setup(SENSOR_PIN, GPIO.IN)
+    for pin in led_pins:
         GPIO.setup(pin, GPIO.OUT)
 
 def cleanup():
     GPIO.cleanup()
 
-# --- LED Patterns ---
+def measure_frequency(pin, duration=1.0):
+    """Count rising edges over the given time to estimate frequency."""
+    count = 0
+    start = time.time()
+    end = start + duration
+    last = GPIO.input(pin)
 
-def pattern_all_on_then_off():
-    print("Pattern: All ON then OFF")
-    for pin in pins:
-        GPIO.output(pin, GPIO.HIGH)
-    time.sleep(SLEEP_TIME)
-    for pin in pins:
+    while time.time() < end:
+        current = GPIO.input(pin)
+        if current == GPIO.HIGH and last == GPIO.LOW:
+            count += 1
+        last = current
+    return count / duration
+
+def show_level(level):
+    print(f"Detected Level: {level}")
+    # Reset all LEDs
+    for pin in led_pins:
         GPIO.output(pin, GPIO.LOW)
-    time.sleep(SLEEP_TIME)
 
-def pattern_blink_one_by_one():
-    print("Pattern: Blink One by One")
-    for pin in pins:
-        GPIO.output(pin, GPIO.HIGH)
-        time.sleep(SLEEP_TIME)
-        GPIO.output(pin, GPIO.LOW)
+    if level == "Low":
+        GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
+    elif level == "Medium":
+        GPIO.output(GREEN_LED_PIN, GPIO.HIGH)
+        GPIO.output(RED_LED_PIN, GPIO.HIGH)
+    elif level == "High":
+        for pin in led_pins:
+            GPIO.output(pin, GPIO.HIGH)
 
+def map_frequency_to_level(freq):
+    for level, (low, high) in FREQ_LEVELS.items():
+        if low <= freq <= high:
+            return level
+    return "Unknown"
 
 def main():
     setup()
-    print(f"Running on pins: {pins}")
-
-    patterns = [
-        pattern_blink_one_by_one,
-    ]
-
     try:
         while True:
-            for pattern in patterns:
-                pattern()
+            freq = measure_frequency(SENSOR_PIN, SAMPLE_DURATION)
+            print(f"Measured Frequency: {freq:.1f} Hz")
+
+            level = map_frequency_to_level(freq)
+            show_level(level)
+
+            time.sleep(0.5)
     except KeyboardInterrupt:
         print("Exiting gracefully")
         cleanup()
