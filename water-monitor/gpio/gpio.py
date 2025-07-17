@@ -4,8 +4,8 @@ import logging
 import sys
 import RPi.GPIO as rpi_gpio
 
-from gpio.models.frequency_level import FrequencyLevel
-from gpio.models.pins import Pins
+from water_monitor.frequency_level import FrequencyLevel
+from gpio.pins import Pins
 
 class GPIO:
     FREQ_LEVELS = {

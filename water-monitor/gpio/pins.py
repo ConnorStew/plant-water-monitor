@@ -1,6 +1,5 @@
 from dataclasses import dataclass, fields
 
-
 @dataclass(frozen=True)
 class Pins:
     GREEN_LED: int = 17
