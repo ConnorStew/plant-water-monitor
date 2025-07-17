@@ -1,4 +1,4 @@
-from water_level import WaterLevel
+from water_monitor.water_level import WaterLevel
 
 class WaterMonitor:
     FREQ_LEVELS = {
