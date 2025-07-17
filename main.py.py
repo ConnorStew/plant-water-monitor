@@ -100,4 +100,6 @@ def main() -> None:
 
         time.sleep(0.2)  # shorter delay for quicker updates
 
-main()
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,12 @@
+[Unit]
+Description= Plant Monitor Service
+After=network.target
+
+[Service]
+ExecStart=uv run /home/connor/water-monitor/main.py
+Restart=always
+User=connor
+WorkingDirectory=/home/connor/water-monitor
+
+[Install]
+WantedBy=multi-user.target
