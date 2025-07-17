@@ -37,8 +37,6 @@ class GPIO:
         return count / self.SAMPLE_DURATION
 
     def show_level(self, level: WaterLevel) -> None:
-        logger.info(f"Detected Level: {level.name}")
-
         for pin in Pins.values():
             rpi_gpio.output(pin, rpi_gpio.LOW)
 
@@ -50,6 +48,6 @@ class GPIO:
             rpi_gpio.output(Pins.BLUE_LED, rpi_gpio.HIGH)
 
     def cleanup(self, signum=None, frame=None):
-        logger.info("Cleaning up resources... Goodbye 👋")
+        logger.info("Shutting down GPIO... Goodbye 👋")
         rpi_gpio.cleanup()
         sys.exit(0)

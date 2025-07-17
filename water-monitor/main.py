@@ -5,7 +5,7 @@ from water_monitor.water_montior import WaterMonitor
 from logger import logger
 
 def main() -> None:
-    logger.debug("💧 Starting 🪴")
+    logger.debug("💧 Starting monitoring... 🪴")
 
     gpio = GPIO()
     water_monitor = WaterMonitor()
