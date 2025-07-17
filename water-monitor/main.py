@@ -12,9 +12,7 @@ def main() -> None:
     water_monitor = WaterMonitor()
     audio = Audio()
 
-    logger.info("Playing sound")
-    audio.play_sound()
-    logger.info("Finished playing sound")
+    audio.play_random_welcome()
 
     while True:
         freq = gpio.measure_frequency()

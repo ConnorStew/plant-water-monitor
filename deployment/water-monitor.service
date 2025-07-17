@@ -7,6 +7,8 @@ ExecStart=/home/connor/.local/bin/uv run /home/connor/water-monitor/water-monito
 Restart=always
 User=connor
 WorkingDirectory=/home/connor/water-monitor
+# Required to allow systemd to play audio.
+Environment="PULSE_RUNTIME_PATH=/run/user/1000/pulse/"
 
 [Install]
 WantedBy=multi-user.target
