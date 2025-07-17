@@ -4,19 +4,10 @@ import logging
 import sys
 import RPi.GPIO as rpi_gpio
 
-from water_monitor.frequency_level import FrequencyLevel
+from water_monitor.water_level import WaterLevel
 from gpio.pins import Pins
 
 class GPIO:
-    FREQ_LEVELS = {
-        FrequencyLevel.UNKNOWN: (-1, -1),
-        FrequencyLevel.WITHOUT_LIQUID: (0, 40), # 20Hz
-        FrequencyLevel.DP_1_WITH_LIQUID: (41, 80), # 50Hz
-        FrequencyLevel.DP_2_WITH_LIQUID: (81, 150), # 100 Hz
-        FrequencyLevel.DP_3_WITH_LIQUID: (151, 280), # 200 Hz
-        FrequencyLevel.DP_4_WITH_LIQUID: (281, 1000) # 400Hz
-    }
-
     SAMPLE_DURATION = 0.5  # seconds
 
     def __init__(self) -> None:
@@ -45,23 +36,17 @@ class GPIO:
 
         return count / self.SAMPLE_DURATION
 
-    def map_frequency_to_level(self, freq: float) -> FrequencyLevel:
-        for level, (low, high) in self.FREQ_LEVELS.items():
-            if low <= freq <= high:
-                return level
-        return FrequencyLevel.UNKNOWN
-
-    def show_level(self, level: FrequencyLevel) -> None:
+    def show_level(self, level: WaterLevel) -> None:
         logging.info(f"Detected Level: {level.name}")
 
         for pin in Pins.values():
             rpi_gpio.output(pin, rpi_gpio.LOW)
 
-        if level == FrequencyLevel.WITHOUT_LIQUID:
+        if level == WaterLevel.WITHOUT_LIQUID:
             rpi_gpio.output(Pins.GREEN_LED, rpi_gpio.HIGH)
-        elif level in (FrequencyLevel.DP_1_WITH_LIQUID, FrequencyLevel.DP_2_WITH_LIQUID):
+        elif level in (WaterLevel.DP_1_WITH_LIQUID, WaterLevel.DP_2_WITH_LIQUID):
             rpi_gpio.output(Pins.RED_LED, rpi_gpio.HIGH)
-        elif level in (FrequencyLevel.DP_3_WITH_LIQUID, FrequencyLevel.DP_4_WITH_LIQUID):
+        elif level in (WaterLevel.DP_3_WITH_LIQUID, WaterLevel.DP_4_WITH_LIQUID):
             rpi_gpio.output(Pins.BLUE_LED, rpi_gpio.HIGH)
 
     def cleanup(self, signum=None, frame=None):
