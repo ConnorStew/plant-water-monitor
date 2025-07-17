@@ -1,6 +1,8 @@
 .venv
 .git
 .python-version
+.gitignore
+__pycache__
 images/
 deployment/
 README.md

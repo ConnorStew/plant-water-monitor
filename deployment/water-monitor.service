@@ -3,7 +3,7 @@ Description= Plant Monitor Service
 After=network.target
 
 [Service]
-ExecStart=/home/connor/.local/bin/uv run /home/connor/water-monitor/main.py
+ExecStart=/home/connor/.local/bin/uv run /home/connor/water-monitor/water-monitor/main.py
 Restart=always
 User=connor
 WorkingDirectory=/home/connor/water-monitor

@@ -11,14 +11,12 @@ sudo systemctl restart water-monitor.service
 Run:
 ```bash
 ssh connor@192.168.4.56
-cd gpio
-source ./venv/bin/activate
-python gpio.py
+uv run ~/water-monitor/water-monitor/main.py
 ```
 
 Init Service:
 ```bash
-scp ./water-monitor.service connor@192.168.4.56:~/water-monitor
+scp ./deployment/water-monitor.service connor@192.168.4.56:~/water-monitor
 sudo mv /home/connor/water-monitor/water-monitor.service /etc/systemd/system
 sudo systemctl enable --enable-now water-monitor.service
 sudo systemctl status water-monitor.service
