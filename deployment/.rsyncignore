@@ -1,0 +1,6 @@
+venv
+.git
+.python-version
+images/
+deployment/
+README.md

@@ -4,7 +4,7 @@
 
 Push:
 ```bash
-scp ./gpio.py ./requirements.txt connor@192.168.4.56:~/gpio
+rsync -avz --exclude-from='./deployment/.rsyncignore' ./ connor@192.168.4.56:~/water-monitor
 sudo systemctl restart water-monitor.service
 ```
 
