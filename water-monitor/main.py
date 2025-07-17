@@ -2,6 +2,7 @@ import time
 
 from gpio.gpio import GPIO
 from water_monitor.water_montior import WaterMonitor
+from audio.audio import Audio
 from logger import logger
 
 def main() -> None:
@@ -9,6 +10,11 @@ def main() -> None:
 
     gpio = GPIO()
     water_monitor = WaterMonitor()
+    audio = Audio()
+
+    logger.info("Playing sound")
+    audio.play_sound()
+    logger.info("Finished playing sound")
 
     while True:
         freq = gpio.measure_frequency()
