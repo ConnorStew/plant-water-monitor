@@ -1,11 +1,11 @@
 import time
 import signal
-import logging
 import sys
 import RPi.GPIO as rpi_gpio
 
 from water_monitor.water_level import WaterLevel
 from gpio.pins import Pins
+from logger import logger
 
 class GPIO:
     SAMPLE_DURATION = 0.5  # seconds
@@ -37,7 +37,7 @@ class GPIO:
         return count / self.SAMPLE_DURATION
 
     def show_level(self, level: WaterLevel) -> None:
-        logging.info(f"Detected Level: {level.name}")
+        logger.info(f"Detected Level: {level.name}")
 
         for pin in Pins.values():
             rpi_gpio.output(pin, rpi_gpio.LOW)
@@ -50,6 +50,6 @@ class GPIO:
             rpi_gpio.output(Pins.BLUE_LED, rpi_gpio.HIGH)
 
     def cleanup(self, signum=None, frame=None):
-        print("Cleaning up resources...")
+        logger.info("Cleaning up resources... Goodbye 👋")
         rpi_gpio.cleanup()
         sys.exit(0)

@@ -1,7 +1,7 @@
 import logging
 from rich.logging import RichHandler
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rich_logger")
 logger.setLevel(logging.DEBUG)
 
 # Avoid adding multiple handlers if re-imported
@@ -11,3 +11,4 @@ if not logger.handlers:
 
     rich_handler.setFormatter(formatter)
     logger.addHandler(rich_handler)
+    logger.propagate = False

@@ -1,5 +1,4 @@
 import time
-import sys
 
 from gpio.gpio import GPIO
 from water_monitor.water_montior import WaterMonitor
@@ -13,7 +12,7 @@ def main() -> None:
 
     while True:
         freq = gpio.measure_frequency()
-        logger.info(f"Measured Frequency: {freq:.1f} Hz")
+        logger.debug(f"Measured Frequency: {freq:.1f} Hz")
 
         level = water_monitor.map_frequency_to_level(freq)
         logger.info(f"Matched level: {level}")
