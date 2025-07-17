@@ -5,7 +5,7 @@
 Push:
 ```bash
 scp ./gpio.py ./requirements.txt connor@192.168.4.56:~/gpio
-sudo systemctl restart gpio.service
+sudo systemctl restart water-monitor.service
 ```
 
 Run:
@@ -18,11 +18,11 @@ python gpio.py
 
 Init Service:
 ```bash
-scp ./gpio.service connor@192.168.4.56:~/gpio
-sudo mv /home/connor/gpio/gpio.service /etc/systemd/system
-sudo systemctl enable gpio.service
-sudo systemctl status gpio.service
-sudo journalctl -u gpio.service
+scp ./water-monitor.service connor@192.168.4.56:~/water-monitor
+sudo mv /home/connor/water-monitor/water-monitor.service /etc/systemd/system
+sudo systemctl enable --enable-now water-monitor.service
+sudo systemctl status water-monitor.service
+sudo journalctl -u water-monitor.service
 ```
 
 ## Setup
