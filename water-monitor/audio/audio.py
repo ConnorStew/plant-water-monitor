@@ -2,6 +2,7 @@ from pathlib import Path
 import simpleaudio as sa
 from pydub import AudioSegment
 import random
+from datetime import datetime
 
 from logger import logger
 
@@ -68,12 +69,18 @@ class Audio:
         self._play_random(self.watered_sounds, "watered")
 
     def play_random_welcome(self) -> None:
-        self._play_random(self.welcome_sounds, "welcome")
+        self._play_random(self.welcome_sounds, "welcome", skip_quiet_hours=True)
 
-    def _play_random(self, sound_list: list[sa.WaveObject], label: str) -> None:
+    def _play_random(self, sound_list: list[sa.WaveObject], label: str, skip_quiet_hours: bool = False) -> None:
         if not sound_list:
             logger.warning(f"No sounds loaded in the '{label}' category.")
             return
+
+        if not skip_quiet_hours:
+            hour = datetime.now().hour
+            if not (9 <= hour < 21):
+                logger.debug(f"Skipping '{label}' sound outside quiet hours (9am-9pm).")
+                return
 
         sound = random.choice(sound_list)
         sound.play()
