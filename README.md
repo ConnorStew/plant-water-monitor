@@ -25,7 +25,24 @@ sudo journalctl -u water-monitor.service
 
 ## Setup
 
-- Using a raspberry pi 1, the pins are in shown in the attached board image.
+Using a Raspberry Pi 1. See `images/board.png` for the pin layout.
+
+### Wiring
+
+**Water Sensor**
+| Wire | GPIO (BCM) | Physical Pin |
+|------|-----------|--------------|
+| Red (VCC) | 3.3V | Pin 1 |
+| Black (GND) | GND | Pin 9 |
+| Green (Signal) | GPIO18 | Pin 12 |
+
+**LEDs** (each with a resistor to GND)
+| Colour | GPIO (BCM) | Physical Pin |
+|--------|-----------|--------------|
+| Green | GPIO17 | Pin 11 |
+| Red | GPIO23 | Pin 16 |
+| Blue | GPIO22 | Pin 15 |
+| GND (breadboard) | GND | Pin 6 |
 
 ## Docs
 
