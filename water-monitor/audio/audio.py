@@ -21,6 +21,8 @@ class Audio:
 
     def __init__(self):
         logger.info("Preloading sounds... 🔉")
+        self._pending: dict[str, list[sa.WaveObject]] = {}
+        self._in_quiet_hours: bool = not self._is_allowed_hour()
 
         self.dry_sounds = self._load_sounds_from_folder(
             self.DRY_SOUNDS_FOLDER, self.BOOST_LEVELS.get("dry", {})
@@ -71,16 +73,31 @@ class Audio:
     def play_random_welcome(self) -> None:
         self._play_random(self.welcome_sounds, "welcome", skip_quiet_hours=True)
 
+    def tick(self) -> None:
+        """Call each loop iteration to flush queued sounds when quiet hours end."""
+        now_quiet = not self._is_allowed_hour()
+        if self._in_quiet_hours and not now_quiet and self._pending:
+            logger.info("Quiet hours ended, playing queued sounds.")
+            for label, sound_list in self._pending.items():
+                self._play_sound(sound_list, label)
+            self._pending.clear()
+        self._in_quiet_hours = now_quiet
+
+    def _is_allowed_hour(self) -> bool:
+        return 9 <= datetime.now().hour < 21
+
     def _play_random(self, sound_list: list[sa.WaveObject], label: str, skip_quiet_hours: bool = False) -> None:
         if not sound_list:
             logger.warning(f"No sounds loaded in the '{label}' category.")
             return
 
-        if not skip_quiet_hours:
-            hour = datetime.now().hour
-            if not (9 <= hour < 21):
-                logger.debug(f"Skipping '{label}' sound outside quiet hours (9am-9pm).")
-                return
+        if not skip_quiet_hours and not self._is_allowed_hour():
+            logger.debug(f"Queuing '{label}' sound until quiet hours end.")
+            self._pending[label] = sound_list
+            return
 
+        self._play_sound(sound_list, label)
+
+    def _play_sound(self, sound_list: list[sa.WaveObject], label: str) -> None:
         sound = random.choice(sound_list)
         sound.play()
