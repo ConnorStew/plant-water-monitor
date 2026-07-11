@@ -2,19 +2,25 @@
 
 I had an old raspberry pi lying around so I decided to turn it into a water monitor for my plants.
 
-This code is deployed onto a raspberry pi 1 so it's too old for gitlab runners, I've left the deployment as rysyncing to the pi instead.
+This code is deployed onto a raspberry pi 1 so it's too old for Gitlab Actions Runners, I've left the deployment as resyncing to the pi instead.
 
 Currently the project does the following:
-    - Checks if the plant state changes to/from wet/dry and plays a dry/watered sound.
-      - Only plays during active hours 9am-9pm
-    - Plays a welcome sound on startup.
-    - Lights up a connected LED based on water level.
+  - Checks if the plant state changes to/from wet/dry and plays a dry/watered sound.
+    - Only plays during active hours 9am-9pm
+  - Plays a welcome sound on startup.
+  - Lights up a connected LED based on water level.
 
 I've haven't included any generic sounds, so you'll need to add your own if you want to reproduce the build.
 
+Add your sounds to the following folders before deploying:
+  - water-monitor/audio/sounds/dry
+  - water-monitor/audio/sounds/watered
+  - water-monitor/audio/sounds/welcome
+
 There's also a small cli for testing sounds `play_sound.py`, which can:
-    - Play a specified file: `--file`
-    - Play a sound from the three categories: `--dry`, `--watered`, `--welcome`
+  - Play a specified file: `--file`
+  - Play a sound from the three categories: `uv run play_sound.py` with: `dry`, `watered`, `welcome`
+  - List sounds loaded: `--list`
 
 ## Commands
 
