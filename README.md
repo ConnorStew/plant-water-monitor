@@ -1,23 +1,39 @@
-# Raspberry-Pi-GPIO
+# Plant Water Monitor
+
+I had an old raspberry pi lying around so I decided to turn it into a water monitor for my plants.
+
+This code is deployed onto a raspberry pi 1 so it's too old for gitlab runners, I've left the deployment as rysyncing to the pi instead.
+
+Currently the project does the following:
+    - Checks if the plant state changes to/from wet/dry and plays a dry/watered sound.
+      - Only plays during active hours 9am-9pm
+    - Plays a welcome sound on startup.
+    - Lights up a connected LED based on water level.
+
+I've haven't included any generic sounds, so you'll need to add your own if you want to reproduce the build.
+
+There's also a small cli for testing sounds `play_sound.py`, which can:
+    - Play a specified file: `--file`
+    - Play a sound from the three categories: `--dry`, `--watered`, `--welcome`
 
 ## Commands
 
 Push:
 ```bash
-rsync -avz --exclude-from='./deployment/.rsyncignore' ./ connor@192.168.4.56:~/water-monitor
+rsync -avz --exclude-from='./deployment/.rsyncignore' ./ <user>@<pi-ip>:~/water-monitor
 sudo systemctl restart water-monitor.service
 ```
 
-Run:
+Test:
 ```bash
-ssh connor@192.168.4.56
+ssh <user>@<pi-ip>
 uv run ~/water-monitor/water-monitor/main.py
 ```
 
 Init Service:
 ```bash
-scp ./deployment/water-monitor.service connor@192.168.4.56:~/water-monitor
-sudo mv /home/connor/water-monitor/water-monitor.service /etc/systemd/system
+scp ./deployment/water-monitor.service <user>@<pi-ip>:~/water-monitor
+sudo mv ~/water-monitor/water-monitor.service /etc/systemd/system
 sudo systemctl enable --enable-now water-monitor.service
 sudo systemctl status water-monitor.service
 sudo journalctl -u water-monitor.service
@@ -46,4 +62,4 @@ Using a Raspberry Pi 1. See `images/board.png` for the pin layout.
 
 ## Docs
 
-- [Water Sensor Docs](http://www.cqrobot.wiki/index.php/Contact_Multi-point_Photoelectric_Liquid_Level_Sensor_SKU:_CQRSENYW003)
+The water sensor is a CQRobot Contact Multi-Point Photoelectric Liquid Level Sensor (SKU: CQRSENYW003). The original documentation site is no longer online; `images/water_outputs.png` preserves the output frequency table and sensor diagram from it.
