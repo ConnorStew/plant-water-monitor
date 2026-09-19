@@ -1,8 +1,9 @@
-from pathlib import Path
-import simpleaudio as sa
-from pydub import AudioSegment
 import random
 from datetime import datetime
+from pathlib import Path
+
+import simpleaudio as sa
+from pydub import AudioSegment
 
 from water_monitor.logger import logger
 

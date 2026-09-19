@@ -7,6 +7,7 @@ Usage:
 
 import sys
 import time
+
 import simpleaudio as sa
 
 from water_monitor.audio import Audio
@@ -62,8 +63,8 @@ def main() -> None:
 
     if arg not in CATEGORIES:
         print(f"Usage: uv run play-sound [{' | '.join(CATEGORIES)}]")
-        print(f"       uv run play-sound --file <filename.wav>")
-        print(f"       uv run play-sound --list")
+        print("       uv run play-sound --file <filename.wav>")
+        print("       uv run play-sound --list")
         sys.exit(1)
 
     audio = Audio()

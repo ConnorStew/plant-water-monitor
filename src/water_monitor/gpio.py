@@ -1,11 +1,12 @@
-import time
 import signal
 import sys
+import time
+from dataclasses import dataclass
+
 import RPi.GPIO as rpi_gpio
 
-from water_monitor.water_level import WaterLevel
 from water_monitor.logger import logger
-from dataclasses import dataclass
+from water_monitor.water_level import WaterLevel
 
 
 @dataclass(frozen=True)
