@@ -1,5 +1,7 @@
 # Plant Water Monitor
 
+[![CI](https://github.com/ConnorStew/plant-water-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/ConnorStew/plant-water-monitor/actions/workflows/ci.yml)
+
 I had an old raspberry pi lying around so I decided to turn it into a water monitor for my plants.
 
 This code is deployed onto a raspberry pi 1 so it's too old for GitHub Actions runners, I've left the deployment as rsyncing to the pi instead.
