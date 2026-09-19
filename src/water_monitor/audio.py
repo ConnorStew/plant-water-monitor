@@ -6,8 +6,8 @@ from datetime import datetime
 
 from water_monitor.logger import logger
 
-# res/ lives at the repo root, outside the package: src/water_monitor/audio/audio.py
-SOUNDS_FOLDER = Path(__file__).resolve().parents[3] / "res" / "sounds"
+# res/ lives at the repo root, outside the package: src/water_monitor/audio.py
+SOUNDS_FOLDER = Path(__file__).resolve().parents[2] / "res" / "sounds"
 
 class Audio:
     DRY_SOUNDS_FOLDER = SOUNDS_FOLDER / "dry"
