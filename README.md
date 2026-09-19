@@ -75,4 +75,4 @@ Using a Raspberry Pi 1. See `images/board.png` for the pin layout.
 
 ## Docs
 
-The water sensor is a CQRobot Contact Multi-Point Photoelectric Liquid Level Sensor (SKU: CQRSENYW003). The original documentation site is no longer online; `images/water_outputs.png` preserves the output frequency table and sensor diagram from it.
+The water sensor is a CQRobot Contact Multi-Point Photoelectric Liquid Level Sensor (SKU: CQRSENYW003). The original documentation site is no longer online; `images/water-outputs.png` preserves the output frequency table and sensor diagram from it.
