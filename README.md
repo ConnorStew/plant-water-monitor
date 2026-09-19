@@ -24,6 +24,9 @@ There's also a small cli for testing sounds `play_sound.py`, which can:
   - Play a sound from the three categories: `uv run play_sound.py` with: `dry`, `watered`, `welcome`
   - List sounds loaded: `--list`
 
+## Development
+- Create the venv: `uv sync`
+
 ## Deployment & Testing
 
 Push:
