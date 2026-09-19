@@ -35,25 +35,21 @@ There's also a small cli for testing sounds `uv run play-sound`, which can:
 
 **The systemd service assumes you're running it under the user `connor` please edit this on deployment.**
 
-Push:
+Deploy (copies the code, installs the systemd service and restarts it):
 ```bash
-rsync -avz --exclude-from='./deployment/.rsyncignore' ./ <user>@<pi-ip>:~/water-monitor
-sudo systemctl restart water-monitor.service
+./deployment/deploy.sh <user>@<pi-ip>
 ```
 
-Test:
+Run manually:
 ```bash
 ssh <user>@<pi-ip>
 cd ~/water-monitor && uv run water-monitor
 ```
 
-Init Service:
+Logs:
 ```bash
-scp ./deployment/water-monitor.service <user>@<pi-ip>:~/water-monitor
-sudo mv ~/water-monitor/water-monitor.service /etc/systemd/system
-sudo systemctl enable --enable-now water-monitor.service
-sudo systemctl status water-monitor.service
-sudo journalctl -u water-monitor.service
+ssh <user>@<pi-ip>
+sudo journalctl -u water-monitor.service -f
 ```
 
 ## Setup
