@@ -26,6 +26,7 @@ There's also a small cli for testing sounds `uv run play-sound`, which can:
 
 ## Development
 - Create the venv: `uv sync`
+- Install the pre-commit hook (lints and formats on commit): `uv run pre-commit install`
 - Run tests: `uv run pytest`
 - Run formatter: `uv run ruff format`
 - Run linting: `uv run ruff check`
