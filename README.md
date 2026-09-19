@@ -15,9 +15,9 @@ Currently the project does the following:
 I haven't included any generic sounds, so you'll need to add your own if you want to reproduce the build.
 
 Add your sounds to the following folders before deploying:
-  - src/water_monitor/audio/sounds/dry
-  - src/water_monitor/audio/sounds/watered
-  - src/water_monitor/audio/sounds/welcome
+  - res/sounds/dry
+  - res/sounds/watered
+  - res/sounds/welcome
 
 There's also a small cli for testing sounds `uv run play-sound`, which can:
   - Play a specified file: `--file`

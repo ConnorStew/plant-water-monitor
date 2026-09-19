@@ -6,10 +6,13 @@ from datetime import datetime
 
 from water_monitor.logger import logger
 
+# res/ lives at the repo root, outside the package: src/water_monitor/audio/audio.py
+SOUNDS_FOLDER = Path(__file__).resolve().parents[3] / "res" / "sounds"
+
 class Audio:
-    DRY_SOUNDS_FOLDER = Path(__file__).parent / "sounds" / "dry"
-    WATERED_SOUNDS_FOLDER = Path(__file__).parent / "sounds" / "watered"
-    WELCOME_SOUNDS_FOLDER = Path(__file__).parent / "sounds" / "welcome"
+    DRY_SOUNDS_FOLDER = SOUNDS_FOLDER / "dry"
+    WATERED_SOUNDS_FOLDER = SOUNDS_FOLDER / "watered"
+    WELCOME_SOUNDS_FOLDER = SOUNDS_FOLDER / "welcome"
 
     BOOST_LEVELS = {
         "dry": {},
