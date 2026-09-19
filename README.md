@@ -29,6 +29,8 @@ There's also a small cli for testing sounds `play_sound.py`, which can:
 
 ## Deployment & Testing
 
+**The systemd service assumes you're running it under the user `connor` please edit this on deployment.**
+
 Push:
 ```bash
 rsync -avz --exclude-from='./deployment/.rsyncignore' ./ <user>@<pi-ip>:~/water-monitor
