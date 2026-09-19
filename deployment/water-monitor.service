@@ -9,6 +9,8 @@ User=connor
 WorkingDirectory=/home/connor/water-monitor
 # Required to allow systemd to play audio.
 Environment="PULSE_RUNTIME_PATH=/run/user/1000/pulse/"
+# Skip dev dependencies on the Pi.
+Environment="UV_NO_DEV=1"
 
 [Install]
 WantedBy=multi-user.target

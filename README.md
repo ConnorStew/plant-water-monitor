@@ -26,6 +26,7 @@ There's also a small cli for testing sounds `uv run play-sound`, which can:
 
 ## Development
 - Create the venv: `uv sync`
+- Run tests: `uv run pytest`
 
 ## Deployment & Testing
 
