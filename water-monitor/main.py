@@ -1,7 +1,7 @@
 import time
 
 from gpio.gpio import GPIO
-from water_monitor.water_montior import WaterMonitor
+from water_monitor.water_monitor import WaterMonitor
 from water_monitor.water_level import WaterLevel
 from audio.audio import Audio
 from logger import logger
