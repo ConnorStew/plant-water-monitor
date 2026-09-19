@@ -9,6 +9,7 @@ from water_monitor.logger import logger
 # res/ lives at the repo root, outside the package: src/water_monitor/audio.py
 SOUNDS_FOLDER = Path(__file__).resolve().parents[2] / "res" / "sounds"
 
+
 class Audio:
     DRY_SOUNDS_FOLDER = SOUNDS_FOLDER / "dry"
     WATERED_SOUNDS_FOLDER = SOUNDS_FOLDER / "watered"
@@ -43,7 +44,9 @@ class Audio:
             f"{len(self.welcome_sounds)} welcome sounds."
         )
 
-    def _load_sounds_from_folder(self, folder: Path, boost_map: dict[str, float]) -> list[sa.WaveObject]:
+    def _load_sounds_from_folder(
+        self, folder: Path, boost_map: dict[str, float]
+    ) -> list[sa.WaveObject]:
         sounds = []
         for file in folder.glob("*.wav"):
             try:
@@ -64,9 +67,9 @@ class Audio:
             louder.raw_data,
             num_channels=louder.channels,
             bytes_per_sample=louder.sample_width,
-            sample_rate=louder.frame_rate
+            sample_rate=louder.frame_rate,
         )
-    
+
     def play_random_dry(self) -> None:
         self._play_random(self.dry_sounds, "dry")
 
@@ -89,7 +92,9 @@ class Audio:
     def _is_allowed_hour(self) -> bool:
         return 9 <= datetime.now().hour < 21
 
-    def _play_random(self, sound_list: list[sa.WaveObject], label: str, skip_quiet_hours: bool = False) -> None:
+    def _play_random(
+        self, sound_list: list[sa.WaveObject], label: str, skip_quiet_hours: bool = False
+    ) -> None:
         if not sound_list:
             logger.warning(f"No sounds loaded in the '{label}' category.")
             return

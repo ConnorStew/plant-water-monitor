@@ -6,6 +6,7 @@ from water_monitor.water_level import WaterLevel
 from water_monitor.audio import Audio
 from water_monitor.logger import logger
 
+
 def main() -> None:
     logger.debug("Starting monitoring...")
 
@@ -36,6 +37,7 @@ def main() -> None:
         audio.tick()
 
         time.sleep(0.2)
+
 
 if __name__ == "__main__":
     main()

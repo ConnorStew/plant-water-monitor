@@ -4,6 +4,7 @@ Usage:
   uv run play-sound --file <filename.wav>        # play specific sound by name
   uv run play-sound --list                       # list all available sounds
 """
+
 import sys
 import time
 import simpleaudio as sa
@@ -18,6 +19,7 @@ FOLDERS = {
     "welcome": Audio.WELCOME_SOUNDS_FOLDER,
 }
 
+
 def find_sound(filename: str):
     for category, folder in FOLDERS.items():
         path = folder / filename
@@ -25,12 +27,14 @@ def find_sound(filename: str):
             return path, category
     return None, None
 
+
 def list_sounds():
     for category, folder in FOLDERS.items():
         sounds = sorted(folder.glob("*.wav"))
         print(f"\n{category}:")
         for s in sounds:
             print(f"  {s.name}")
+
 
 def main() -> None:
     if len(sys.argv) < 2:
@@ -72,6 +76,7 @@ def main() -> None:
         audio.play_random_welcome()
 
     time.sleep(5)
+
 
 if __name__ == "__main__":
     main()

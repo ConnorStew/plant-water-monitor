@@ -2,6 +2,7 @@ from enum import Enum
 
 # Frequency thresholds for each level
 
+
 class WaterLevel(Enum):
     UNKNOWN = 0
     WITHOUT_LIQUID = 1

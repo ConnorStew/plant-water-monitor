@@ -7,6 +7,7 @@ from water_monitor.water_level import WaterLevel
 from water_monitor.logger import logger
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class Pins:
     GREEN_LED: int = 17
@@ -17,6 +18,7 @@ class Pins:
     @classmethod
     def leds(cls) -> list[int]:
         return [cls.GREEN_LED, cls.RED_LED, cls.BLUE_LED]
+
 
 class GPIO:
     SAMPLE_DURATION = 0.5  # seconds
