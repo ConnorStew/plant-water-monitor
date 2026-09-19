@@ -1,13 +1,13 @@
 import time
 
-from water_monitor.gpio.gpio import GPIO
+from water_monitor.gpio import GPIO
 from water_monitor.monitor import WaterMonitor
 from water_monitor.water_level import WaterLevel
-from water_monitor.audio.audio import Audio
+from water_monitor.audio import Audio
 from water_monitor.logger import logger
 
 def main() -> None:
-    logger.debug("💧 Starting monitoring... 🪴")
+    logger.debug("Starting monitoring...")
 
     gpio = GPIO()
     water_monitor = WaterMonitor()
