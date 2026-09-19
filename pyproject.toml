@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-water-monitor = "water_monitor.main:main"
+water-monitor = "water_monitor.__main__:main"
 play-sound = "water_monitor.play_sound:main"
 
 [build-system]
