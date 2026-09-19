@@ -33,7 +33,7 @@ There's also a small cli for testing sounds `uv run play-sound`, which can:
 
 ## Deployment & Testing
 
-**The systemd service assumes you're running it under the user `connor` please edit this on deployment.**
+The monitor runs as a systemd user service for whichever user you deploy as. That user needs to be in the `gpio` group (the default Pi user already is).
 
 Deploy (copies the code, installs the systemd service and restarts it):
 ```bash
@@ -49,7 +49,7 @@ cd ~/water-monitor && uv run water-monitor
 Logs:
 ```bash
 ssh <user>@<pi-ip>
-sudo journalctl -u water-monitor.service -f
+journalctl --user -u water-monitor.service -f
 ```
 
 ## Setup

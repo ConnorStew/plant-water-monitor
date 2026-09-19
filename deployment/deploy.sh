@@ -13,13 +13,15 @@ rsync -avz --delete --exclude=__pycache__ \
     pyproject.toml uv.lock README.md src res \
     "$host:~/water-monitor/"
 
-# Install the latest unit file and restart the service.
+# Install the latest unit file as a user service and restart it.
+# Lingering lets the service start at boot without logging in.
 scp deployment/water-monitor.service "$host:/tmp/water-monitor.service"
 ssh -t "$host" '
-    sudo install -m 644 /tmp/water-monitor.service /etc/systemd/system/water-monitor.service &&
+    install -D -m 644 /tmp/water-monitor.service ~/.config/systemd/user/water-monitor.service &&
     rm /tmp/water-monitor.service &&
-    sudo systemctl daemon-reload &&
-    sudo systemctl enable water-monitor.service &&
-    sudo systemctl restart water-monitor.service &&
-    systemctl --no-pager status water-monitor.service
+    sudo loginctl enable-linger "$USER" &&
+    systemctl --user daemon-reload &&
+    systemctl --user enable water-monitor.service &&
+    systemctl --user restart water-monitor.service &&
+    systemctl --user --no-pager status water-monitor.service
 '
