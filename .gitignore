@@ -1,6 +1,3 @@
 __pycache__
-.venv
-.python-version
-res/sounds/sources.md
-res/sounds/*/*.mp3
-res/sounds/*/*.wav
+.*
+res/sounds/*
