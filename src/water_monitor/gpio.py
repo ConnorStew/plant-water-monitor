@@ -5,7 +5,7 @@ import RPi.GPIO as rpi_gpio
 
 from water_monitor.water_level import WaterLevel
 from water_monitor.logger import logger
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Pins:
@@ -15,8 +15,8 @@ class Pins:
     SENSOR: int = 18
 
     @classmethod
-    def values(cls) -> list[int]:
-        return [getattr(cls, f.name) for f in fields(cls)]
+    def leds(cls) -> list[int]:
+        return [cls.GREEN_LED, cls.RED_LED, cls.BLUE_LED]
 
 class GPIO:
     SAMPLE_DURATION = 0.5  # seconds
@@ -29,7 +29,7 @@ class GPIO:
         rpi_gpio.setwarnings(False)
         rpi_gpio.setup(Pins.SENSOR, rpi_gpio.IN, pull_up_down=rpi_gpio.PUD_DOWN)
 
-        for pin in Pins.values():
+        for pin in Pins.leds():
             rpi_gpio.setup(pin, rpi_gpio.OUT)
 
     def measure_frequency(self) -> float:
@@ -48,7 +48,7 @@ class GPIO:
         return count / self.SAMPLE_DURATION
 
     def show_level(self, level: WaterLevel) -> None:
-        for pin in Pins.values():
+        for pin in Pins.leds():
             rpi_gpio.output(pin, rpi_gpio.LOW)
 
         if level == WaterLevel.WITHOUT_LIQUID:
@@ -59,6 +59,6 @@ class GPIO:
             rpi_gpio.output(Pins.BLUE_LED, rpi_gpio.HIGH)
 
     def cleanup(self, signum=None, frame=None):
-        logger.info("Shutting down GPIO... Goodbye 👋")
+        logger.info("Shutting down GPIO...")
         rpi_gpio.cleanup()
         sys.exit(0)
