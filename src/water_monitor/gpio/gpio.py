@@ -4,8 +4,8 @@ import sys
 import RPi.GPIO as rpi_gpio
 
 from water_monitor.water_level import WaterLevel
-from gpio.pins import Pins
-from logger import logger
+from water_monitor.gpio.pins import Pins
+from water_monitor.logger import logger
 
 class GPIO:
     SAMPLE_DURATION = 0.5  # seconds

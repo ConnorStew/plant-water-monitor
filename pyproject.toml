@@ -9,3 +9,11 @@ dependencies = [
     "simpleaudio",
     "pydub"
 ]
+
+[project.scripts]
+water-monitor = "water_monitor.main:main"
+play-sound = "water_monitor.play_sound:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

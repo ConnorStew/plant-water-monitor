@@ -4,7 +4,7 @@ from pydub import AudioSegment
 import random
 from datetime import datetime
 
-from logger import logger
+from water_monitor.logger import logger
 
 class Audio:
     DRY_SOUNDS_FOLDER = Path(__file__).parent / "sounds" / "dry"

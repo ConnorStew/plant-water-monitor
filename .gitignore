@@ -1,6 +1,6 @@
 __pycache__
 .venv
 .python-version
-src/audio/sounds/sources.md
-src/audio/sounds/*/*.mp3
-src/audio/sounds/*/*.wav
+src/water_monitor/audio/sounds/sources.md
+src/water_monitor/audio/sounds/*/*.mp3
+src/water_monitor/audio/sounds/*/*.wav

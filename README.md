@@ -15,13 +15,13 @@ Currently the project does the following:
 I haven't included any generic sounds, so you'll need to add your own if you want to reproduce the build.
 
 Add your sounds to the following folders before deploying:
-  - src/audio/sounds/dry
-  - src/audio/sounds/watered
-  - src/audio/sounds/welcome
+  - src/water_monitor/audio/sounds/dry
+  - src/water_monitor/audio/sounds/watered
+  - src/water_monitor/audio/sounds/welcome
 
-There's also a small cli for testing sounds `play_sound.py`, which can:
+There's also a small cli for testing sounds `uv run play-sound`, which can:
   - Play a specified file: `--file`
-  - Play a sound from the three categories: `uv run play_sound.py` with: `dry`, `watered`, `welcome`
+  - Play a sound from the three categories: `dry`, `watered`, `welcome`
   - List sounds loaded: `--list`
 
 ## Development
@@ -40,7 +40,7 @@ sudo systemctl restart water-monitor.service
 Test:
 ```bash
 ssh <user>@<pi-ip>
-uv run ~/water-monitor/src/main.py
+cd ~/water-monitor && uv run water-monitor
 ```
 
 Init Service:

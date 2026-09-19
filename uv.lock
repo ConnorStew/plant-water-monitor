@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.11"
 
 [[package]]
@@ -69,7 +69,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/94/1b/4dc29653733202b68
 [[package]]
 name = "water-monitor"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "pydub" },
     { name = "rich" },
