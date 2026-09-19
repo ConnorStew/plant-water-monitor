@@ -8,7 +8,7 @@ import sys
 import time
 import simpleaudio as sa
 
-from water_monitor.audio.audio import Audio
+from water_monitor.audio import Audio
 
 CATEGORIES = ("dry", "watered", "welcome")
 

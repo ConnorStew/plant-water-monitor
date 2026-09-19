@@ -40,7 +40,7 @@ class Audio:
         logger.info(
             f"Preloaded {len(self.dry_sounds)} dry, "
             f"{len(self.watered_sounds)} watered, and "
-            f"{len(self.welcome_sounds)} welcome sounds ✅"
+            f"{len(self.welcome_sounds)} welcome sounds."
         )
 
     def _load_sounds_from_folder(self, folder: Path, boost_map: dict[str, float]) -> list[sa.WaveObject]:
